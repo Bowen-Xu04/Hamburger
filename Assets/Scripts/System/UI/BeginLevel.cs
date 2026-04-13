@@ -9,7 +9,7 @@ public class BeginLevel : MonoBehaviour
 
     public void ButtonClick()
     {
-        BGSManager.Instance.Play(BGSName);
+        //BGSManager.Instance.Play(BGSName);
         SceneManager.LoadScene(targetLevel);
     }
 }

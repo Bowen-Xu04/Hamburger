@@ -12,7 +12,7 @@ public class Continue : MonoBehaviour
         if (SaveManager.canContinue == true)
         {
             SaveManager.beginNewGame = false;
-            BGSManager.Instance.Play(BGSName);
+            //BGSManager.Instance.Play(BGSName);
             SceneManager.LoadScene("Choose");
         }
     }

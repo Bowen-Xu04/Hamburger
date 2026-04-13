@@ -64,7 +64,7 @@ public class SaveManager : Singleton<SaveManager>
         Load(GameManager.Instance.playerStats, "Progress");
 
         //int nowProgress = GameManager.Instance.playerStats.progress;
-        for (int i = 0; i < GameManager.Instance.totalLevel; i++)
+        for (int i = 0; i < GameManager.totalLevel; i++)
         {
             //print(backgroundPanel.transform.Find("Level" + (i + 1).ToString()) != null);
             levelButtonList.Add(backgroundPanel.transform.Find("Level" + (i + 1).ToString()).transform);

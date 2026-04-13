@@ -9,7 +9,7 @@ public class Back : MonoBehaviour
 
     public void ButtonClick()
     {
-        BGSManager.Instance.Play(BGSName);
-        SceneManager.LoadScene("Title");
+        //BGSManager.Instance.Play(BGSName);
+        //SceneManager.LoadScene("Title");
     }
 }

@@ -8,7 +8,7 @@ public class Quit : MonoBehaviour
 
     public void ButtonClick()
     {
-        BGSManager.Instance.Play(BGSName);
+        //BGSManager.Instance.Play(BGSName);
         Invoke("QuitGame", 0.25f);
     }
 

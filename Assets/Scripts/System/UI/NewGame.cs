@@ -10,7 +10,7 @@ public class NewGame : MonoBehaviour
     public void ButtonClick()
     {
         SaveManager.beginNewGame = true;
-        BGSManager.Instance.Play(BGSName);
+        //BGSManager.Instance.Play(BGSName);
         SceneManager.LoadScene("Choose");
     }
 }

@@ -7,6 +7,7 @@ public class BGMManager : Singleton<BGMManager>
 {
     private AudioSource audioSource;
     // TODO: 定义AudioClip
+    private AudioClip bgm;
 
     protected override void Awake()
     {
@@ -17,6 +18,7 @@ public class BGMManager : Singleton<BGMManager>
         audioSource.loop = true;
 
         // TODO: 从Resources/Music/BGM里加载AudioClip
+        bgm = Resources.Load<AudioClip>("Music/BGM/bgm");
     }
 
     public void Play(string name)
@@ -26,7 +28,9 @@ public class BGMManager : Singleton<BGMManager>
         // TODO: 根据name选择要播放的BGM
         switch (name)
         {
-            case "0":
+            case "bgm":
+                audioSource.clip = bgm;
+                audioSource.volume = 1f;
                 break;
         }
 

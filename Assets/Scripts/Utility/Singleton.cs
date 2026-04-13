@@ -43,8 +43,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         get { return instance != null; }
     }
 
-    public void Initialize() { }
-
     protected virtual void Awake()
     {
         if (instance != null && instance != this)
