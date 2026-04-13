@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.OnPause == false && GameManager.OnOpenHelpWindow == false && isActive == true)
+        if (GameManager.OnPause == false && GameManager.OnOpenHelpWindow == 0 && isActive == true)
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {

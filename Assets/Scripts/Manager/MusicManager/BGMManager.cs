@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BGMManager : Singleton<BGMManager>
 {
+    //private float volume = 0.5f;
     private AudioSource audioSource;
     // TODO: 定义AudioClip
     private AudioClip bgm;
@@ -16,6 +17,7 @@ public class BGMManager : Singleton<BGMManager>
 
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.loop = true;
+        audioSource.volume = 0.5f;
 
         // TODO: 从Resources/Music/BGM里加载AudioClip
         bgm = Resources.Load<AudioClip>("Music/BGM/bgm");
@@ -40,5 +42,10 @@ public class BGMManager : Singleton<BGMManager>
     public void Stop()
     {
         audioSource.Stop();
+    }
+
+    public void SetVolume(float volume)
+    {
+        audioSource.volume = volume;
     }
 }

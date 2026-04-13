@@ -18,7 +18,8 @@ public struct LevelDetail
 
 public class GameManager : Singleton<GameManager>
 {
-    private static bool onGame, onPause, onOpenHelpWindow;
+    private static bool onGame, onPause;
+    private static int onOpenHelpWindow;
     readonly string escapeBGSName;
 
     public static bool OnGame
@@ -31,7 +32,7 @@ public class GameManager : Singleton<GameManager>
         get { return onPause; }
     }
 
-    public static bool OnOpenHelpWindow
+    public static int OnOpenHelpWindow
     {
         get { return onOpenHelpWindow; }
     }
@@ -43,7 +44,7 @@ public class GameManager : Singleton<GameManager>
     public int NowLevel => nowLevel;
     public LevelDetail NowLevelDetail => levels[nowLevel];
 
-    public PlayerStats_SO playerStats;
+    //public PlayerStats_SO playerStats;
     VoiceController voiceController;
 
     protected override void Awake()
@@ -53,7 +54,7 @@ public class GameManager : Singleton<GameManager>
         onGame = false;
         //SceneManager.sceneLoaded += OnSceneLoaded;
 
-        playerStats = Resources.Load<PlayerStats_SO>("Data/Data");
+        //playerStats = Resources.Load<PlayerStats_SO>("Data/Data");
         //winText = GameObject.Find("Win").GetComponent<TMP_Text>();
         //winText.enabled = false;
 
@@ -62,25 +63,25 @@ public class GameManager : Singleton<GameManager>
         levels = new LevelDetail[totalLevel];
 
         levels[0].totalBird = 2;
-        levels[0].time = 90;
+        levels[0].time = 60;
         levels[0].posProb = new float[] { 0.7f, 0.3f, 0.0f };
         levels[0].birdOriginalRoomID = new int[] { 0, 0 };
         levels[0].birdAppearance = new int[] { 0, 1 };
 
         levels[1].totalBird = 4;
-        levels[1].time = 120;
+        levels[1].time = 80;
         levels[1].posProb = new float[] { 0.4f, 0.4f, 0.2f };
         levels[1].birdOriginalRoomID = new int[] { 0, 0, 1, 1 };
         levels[1].birdAppearance = new int[] { 0, 1, 0, 1 };
 
         levels[2].totalBird = 6;
-        levels[2].time = 150;
+        levels[2].time = 100;
         levels[2].posProb = new float[] { 0.3f, 0.4f, 0.3f };
         levels[2].birdOriginalRoomID = new int[] { 0, 0, 1, 1, 2, 2 };
         levels[2].birdAppearance = new int[] { 0, 1, 2, 3, 0, 2 };
 
         levels[3].totalBird = 8;
-        levels[3].time = 180;
+        levels[3].time = 120;
         levels[3].posProb = new float[] { 0.2f, 0.3f, 0.5f };
         levels[3].birdOriginalRoomID = new int[] { 0, 0, 1, 1, 2, 2, 3, 3 };
         levels[3].birdAppearance = new int[] { 0, 1, 2, 3, 0, 2, 1, 3 };
@@ -109,16 +110,17 @@ public class GameManager : Singleton<GameManager>
     {
         if (onGame == true)
         {
-            if (OnOpenHelpWindow == false && Input.GetKeyDown(KeyCode.Escape) == true)
+            if (OnOpenHelpWindow == 0 && Input.GetKeyDown(KeyCode.Escape) == true)
             {
                 SetPauseState(!onPause);
             }
             if (onPause == false && Input.GetKeyDown(KeyCode.H) == true)
             {
-                OpenHelpWindow(!onOpenHelpWindow);
+                //print((onOpenHelpWindow + 1) % 3);
+                OpenHelpWindow((onOpenHelpWindow + 1) % 3);
             }
 
-            if (onPause == false && OnOpenHelpWindow == false && Input.GetKeyDown(KeyCode.Space) == true)
+            if (onPause == false && OnOpenHelpWindow == 0 && Input.GetKeyDown(KeyCode.Space) == true)
             {
                 //print("t1");
                 voiceController.ButtonClick();
@@ -159,7 +161,7 @@ public class GameManager : Singleton<GameManager>
         nowLevel = level;
         onGame = true;
         SetPauseState(false);
-        OpenHelpWindow(false);
+        OpenHelpWindow(0);
         MouseManager.Instance.Activate(true);
 
         //BGMManager.Instance.Play((nowLevel + 1).ToString());
@@ -182,7 +184,7 @@ public class GameManager : Singleton<GameManager>
 
         if (level == 0)
         {
-            OpenHelpWindow(true);
+            OpenHelpWindow(1);
         }
 
         //levels[nowLevel].remainingBird = levels[nowLevel].totalBird;
@@ -195,6 +197,7 @@ public class GameManager : Singleton<GameManager>
 
     public void RestartGame()
     {
+        //BGSManager.Instance.Play("click");
         StartGame(nowLevel, true);
     }
 
@@ -222,6 +225,8 @@ public class GameManager : Singleton<GameManager>
     public void LevelWin()
     {
         onGame = false;
+        TimerManager.Instance.SetTimingState(false);
+        BGSManager.Instance.Play("win");
         UIManager.Instance.LevelEnd(true);
         //winText.enabled = true;
     }
@@ -229,6 +234,8 @@ public class GameManager : Singleton<GameManager>
     public void LevelLose()
     {
         onGame = false;
+        TimerManager.Instance.SetTimingState(false);
+        BGSManager.Instance.Play("lose");
         UIManager.Instance.LevelEnd(false);
     }
 
@@ -243,43 +250,52 @@ public class GameManager : Singleton<GameManager>
 
     public void SetPauseStateButton()
     {
-        if (onPause == false && onOpenHelpWindow == false)
+        if (onPause == false && onOpenHelpWindow == 0)
         {
             SetPauseState(true);
         }
     }
 
-    public void OpenHelpWindow(bool state)
+    public void OpenHelpWindow(int state)
     {
         onOpenHelpWindow = state;
-        TimerManager.Instance.SetTimingState(!state);
-        MouseManager.Instance.Activate(!state);
+        TimerManager.Instance.SetTimingState(state == 0);
+        MouseManager.Instance.Activate(state == 0);
         //BGSManager.Instance.Play(escapeBGSName);
         UIManager.Instance.OpenHelpWindow(state);
     }
 
     public void OpenHelpWindowButton()
     {
-        if (onPause == false && onOpenHelpWindow == false)
+        if (onPause == false && onOpenHelpWindow == 0)
         {
-            OpenHelpWindow(true);
+            OpenHelpWindow(1);
         }
     }
 
     public void SwitchRoom(int roomID)
     {
-        if (roomID <= nowLevel)
+        if (onGame == true && onPause == false && onOpenHelpWindow == 0)
         {
-            RoomManager.Instance.SwitchRoom(roomID);
-        }
-        else
-        {
-            print("Room locked.");
+            if (roomID <= nowLevel)
+            {
+                RoomManager.Instance.SwitchRoom(roomID);
+                BGSManager.Instance.Play("click");
+            }
+            else
+            {
+                print("Room locked.");
+                BGSManager.Instance.Play("kada");
+            }
         }
     }
 
     public void SwitchRoomCamera(int roomCameraID)
     {
-        CameraManager.Instance.SwitchCamera(RoomManager.CurrentRoomID, roomCameraID);
+        if (onGame == true && onPause == false && onOpenHelpWindow == 0)
+        {
+            CameraManager.Instance.SwitchCamera(RoomManager.CurrentRoomID, roomCameraID);
+            BGSManager.Instance.Play("click");
+        }
     }
 }

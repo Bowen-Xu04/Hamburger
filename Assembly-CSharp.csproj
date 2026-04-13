@@ -63,33 +63,25 @@
     <Analyzer Include="D:\Unity\Unity Editor\2022.3.55f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\System\UI\Quit.cs" />
     <Compile Include="Assets\Scripts\Utility\Singleton.cs" />
     <Compile Include="Assets\Scripts\Manager\UIManager.cs" />
     <Compile Include="Assets\Scripts\Manager\TimerManager.cs" />
     <Compile Include="Assets\Scripts\Controller\BirdController.cs" />
     <Compile Include="Assets\Scripts\Manager\CameraManager.cs" />
-    <Compile Include="Assets\Scripts\System\UI\Continue.cs" />
-    <Compile Include="Assets\Scripts\System\UI\NewGame.cs" />
     <Compile Include="Assets\Pipeline Settings\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Manager\MouseManager.cs" />
-    <Compile Include="Assets\Scripts\System\Data\PlayerStats_SO.cs" />
     <Compile Include="Assets\Scripts\Manager\MusicManager\BGSManager.cs" />
     <Compile Include="Assets\Scripts\Effect\OutlineFeature.cs" />
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\Controller\VoiceController.cs" />
-    <Compile Include="Assets\Scripts\Manager\SaveManager.cs" />
     <Compile Include="Assets\Scripts\Manager\BirdManager.cs" />
     <Compile Include="Assets\Asset Packs\ithappy\Animals_FREE\Scripts\MovePlayerInput.cs" />
     <Compile Include="Assets\Scripts\Manager\RoomManager.cs" />
     <Compile Include="Assets\Asset Packs\ithappy\Animals_FREE\Scripts\CreatureMover.cs" />
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Manager\MusicManager\BGMManager.cs" />
-    <Compile Include="Assets\Scripts\System\UI\SwitchCameraButton.cs" />
-    <Compile Include="Assets\Scripts\System\UI\Back.cs" />
     <Compile Include="Assets\Asset Packs\ithappy\Animals_FREE\Scripts\ThirdPersonCamera.cs" />
     <Compile Include="Assets\Asset Packs\ithappy\Animals_FREE\Scripts\PlayerCamera.cs" />
-    <Compile Include="Assets\Scripts\System\UI\BeginLevel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Asset Packs\TextMesh Pro\Shaders\TMPro.cginc" />

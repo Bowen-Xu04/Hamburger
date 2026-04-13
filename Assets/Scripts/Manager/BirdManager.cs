@@ -72,6 +72,7 @@ public class BirdManager : Singleton<BirdManager>
     {
         remainingBird--;
         UIManager.Instance.SetRemainingBird(remainingBird, totalBird);
+        BGSManager.Instance.Play("catch");
         if (remainingBird == 0)
         {
             GameManager.Instance.LevelWin();
@@ -192,7 +193,7 @@ public class BirdManager : Singleton<BirdManager>
                     fleeBirdAppearance = birdControllers[i].BirdDetail.appearance;
                     birdControllers[i].Flee();
                 }
-
+                print("num=" + num.ToString());
                 num |= 1 << birdControllers[i].BirdDetail.roomID;
             }
 

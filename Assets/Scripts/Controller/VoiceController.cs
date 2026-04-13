@@ -36,12 +36,19 @@ public class VoiceController : MonoBehaviour
 
     public void ButtonClick()
     {
-        if (!inCD)
+        if (GameManager.OnGame == true && GameManager.OnPause == false && GameManager.OnOpenHelpWindow == 0)
         {
-            print("Voice");
-            BirdManager.Instance.Voice();
-            inCD = true;
-            UIManager.Instance.SetVoiceCD(0);
+            if (!inCD)
+            {
+                print("Voice");
+                BirdManager.Instance.Voice();
+                inCD = true;
+                UIManager.Instance.SetVoiceCD(0);
+            }
+            else
+            {
+                BGSManager.Instance.Play("kada");
+            }
         }
     }
 }

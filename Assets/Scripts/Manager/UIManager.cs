@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.Rendering;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -25,13 +26,14 @@ public class UIManager : Singleton<UIManager>
     public Transform VoiceImageTransform => voiceImageTransform;
     private RectTransform voiceCDRectTransform;
     private Transform messagePanelImageTransform;
-    private TMP_Text messagePanelText, remainingBirdText;
+    private TMP_Text messagePanelText, remainingBirdText, volumeText, titleVolumeText;
 
     private Transform chooseLevelImage;
 
-
     private Transform startGameImage;
+    private Transform titleVolumeImage;
 
+    private int volume = 50;
 
     private Transform about;
 
@@ -71,6 +73,7 @@ public class UIManager : Singleton<UIManager>
         messagePanelText = messagePanel.transform.Find("Text").GetComponent<TMP_Text>();
         victory = endGamePanel.transform.GetChild(0).gameObject;
         defeat = endGamePanel.transform.GetChild(1).gameObject;
+        volumeText = pauseGamePanel.transform.Find("Volume").Find("Vol").GetComponent<TMP_Text>();
 
         paw.GetComponent<Image>().enabled = false;
         maskPanel.SetActive(false);
@@ -82,8 +85,11 @@ public class UIManager : Singleton<UIManager>
 
         startGameImage = GameObject.Find("Canvas").transform.Find("StartGameImage");
         chooseLevelImage = GameObject.Find("Canvas").transform.Find("ChooseLevelImage");
-        about = startGameImage.Find("AboutI");
+        about = startGameImage.Find("AboutImage");
         about.gameObject.SetActive(false);
+        titleVolumeImage = startGameImage.Find("Volume");
+        titleVolumeText = titleVolumeImage.GetChild(0).Find("Vol").GetComponent<TMP_Text>();
+        titleVolumeImage.gameObject.SetActive(false);
     }
 
     void Start()
@@ -188,11 +194,28 @@ public class UIManager : Singleton<UIManager>
     public void SetPauseState(bool state)
     {
         pauseGamePanel.SetActive(state);
+        volumeText.text = volume.ToString();
     }
 
-    public void OpenHelpWindow(bool state)
+    public void OpenHelpWindow(int state)
     {
-        helpPanel.SetActive(state);
+        if (state == 0)
+        {
+            helpPanel.SetActive(false);
+            return;
+        }
+
+        helpPanel.SetActive(true);
+        if (state == 1)
+        {
+            helpPanel.transform.GetChild(0).gameObject.SetActive(true);
+            helpPanel.transform.GetChild(1).gameObject.SetActive(false);
+        }
+        else
+        {
+            helpPanel.transform.GetChild(0).gameObject.SetActive(false);
+            helpPanel.transform.GetChild(1).gameObject.SetActive(true);
+        }
     }
 
     public void LevelEnd(bool win)
@@ -271,8 +294,10 @@ public class UIManager : Singleton<UIManager>
         {
             paw.rotation = Quaternion.Euler(0, 0, CalculateAngle());
             Color color = paw.GetComponent<Image>().color;
-            color.a = Mathf.Max(1, BirdManager.Instance.CalculateCosAngle(birdID) * 0.5f + 0.6f);
+            color.a = Mathf.Min(1, 1.02f * Mathf.Exp(6 * BirdManager.Instance.CalculateCosAngle(birdID)) / Mathf.Exp(6));
             paw.GetComponent<Image>().color = color;
+
+            //print(color.a);
         }
     }
 
@@ -396,6 +421,41 @@ public class UIManager : Singleton<UIManager>
     public void About(bool state)
     {
         about.gameObject.SetActive(state);
+        if (state)
+        {
+            OpenSettings(false);
+            BGSManager.Instance.Play("click");
+        }
+    }
+
+    public void SetVolume(int delta)
+    {
+        volume = Math.Clamp(volume + delta, 0, 100);
+        if (titleVolumeImage.gameObject.activeInHierarchy)
+        {
+            titleVolumeText.text = volume.ToString();
+        }
+        else
+        {
+            volumeText.text = volume.ToString();
+        }
+        BGMManager.Instance.SetVolume(volume * 0.01f);
+        BGSManager.Instance.SetVolume(volume * 0.01f);
+        BGSManager.Instance.Play("click");
+    }
+
+    public void SettingsButton()
+    {
+        OpenSettings(!titleVolumeImage.gameObject.activeSelf);
+    }
+
+    public void OpenSettings(bool state)
+    {
+        titleVolumeImage.gameObject.SetActive(state);
+        if (state == true)
+        {
+            titleVolumeText.text = volume.ToString();
+        }
         BGSManager.Instance.Play("click");
     }
 }
